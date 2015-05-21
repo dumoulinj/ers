@@ -1,2 +1,2 @@
-# erf
-ERF is an Emotion Recognition Framework dedicated to researchers, whose purpose is to help them with emotion recognition for movies tasks.
+# ers
+ERS is an Emotion Recognition Framework dedicated to researchers, whose purpose is to help them with emotion recognition in movies tasks.
