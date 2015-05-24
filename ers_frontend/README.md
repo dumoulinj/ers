@@ -71,5 +71,5 @@ brunch watch -s
     config.coffee               --> Brunch config
     package.json                --> node modules config
 
-    server.coffe                --> Custom server, allowing the file-upload feature
+    server.coffee                --> Custom server, allowing the file-upload feature
 ```
