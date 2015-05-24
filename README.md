@@ -101,6 +101,7 @@ python manage.py test
 Open your web browser and go to http://localhost:3333/#/home to verify that the web application is accessible.
 
 Then go to the page "Test server", and click on each buttons to test the connection with the different backend services.
+![Alt text](/test_server.png?raw=true "Test server result")
 
 ## License
 This software is released under the [MIT License](https://github.com/dumoulinj/ers/blob/master/LICENSE).
