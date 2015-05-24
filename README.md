@@ -27,12 +27,12 @@ Install main dependencies (many of these dependencies are available on Mac OS X 
 * npm (https://nodejs.org/download/)
 
 Then, install python packages:
-```
+```shell
 sudo pip install -r requirements.txt
 ```
 
 Then, install web packages:
-```
+```shell
 cd ers_frontend
 sudo npm install
 bower install
@@ -50,23 +50,23 @@ Control that the user root has all privileges on this database.
 You can use the provided scripts to run the required services. Be sure to call each script from this path, and not from the script folder.
 
 ### 1. Celery workers (using Redis broker)
-```
+```shell
 ./scripts/run_redis.sh
 ./scripts/rund_celery.sh
 ```
 
 ### 2. Django REST server
-```
+```shell
 ./scripts/run_django.sh
 ```
 
 ### 3. SwampDragon WebSockets server
-```
+```shell
 ./scripts/run_swampdragon.sh
 ```
 
 ### 4. Frontend web server
-```
+```shell
 ./scripts/run_brunch.sh
 ```
 
@@ -92,7 +92,7 @@ $ers_installation_path$/datasets/test_dataset/video/neutral/neutral.avi
 1_shot.avi should contain 1 and only 1 shot boundary (an easy one, hard cut).
 
 Then, launch the Django project unit tests to verify that the backend is working:
-```
+```shell
 cd ers_backend
 python manage.py test
 ```
