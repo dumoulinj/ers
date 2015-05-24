@@ -52,6 +52,9 @@ You can use the provided scripts to run the required services. Be sure to call e
 ### 1. Celery workers (using Redis broker)
 ```shell
 ./scripts/run_redis.sh
+```
+
+```shell
 ./scripts/rund_celery.sh
 ```
 
