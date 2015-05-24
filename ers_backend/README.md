@@ -2,9 +2,17 @@
 This Django application is the backend of the e*RS* system.
 
 ## Launch the application in development
+```shell
 python manage.py runserver
+````
+
+```shell
 python server.py
+````
+
+```shell
 celery -A ers_backend worker --loglevel=info
+```
 
 ## Directory Layout
     arousal_modeler/    --> App for arousal modeling
