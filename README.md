@@ -1,6 +1,8 @@
 # e*RS*
 e*RS* is an emotion recognition system dedicated to researchers, whose purpose is to help them with emotion recognition in movies tasks.
 
+To see what you can do with e*RS*, have a look to http://ers.ilab-research.ch/#/presentation
+
 ## Installation
 e*RS* works on Linux and Mac OS X. (it is planned to dockerize it soon)
 
