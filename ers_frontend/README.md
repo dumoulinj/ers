@@ -3,9 +3,9 @@ This AngularJS application is the frontend web application for the e*RS* system.
 It is based on the angular-brunch-seed skeleton : https://github.com/scotch/angular-brunch-seed.
 
 ## Launch the application in development
-```
+```shell
 brunch watch -s
-``
+```
 
 ## Directory Layout
     _public/                  --> Contains generated file for servering the app
