@@ -8,6 +8,7 @@ brunch watch -s
 ```
 
 ## Directory Layout
+```
     _public/                  --> Contains generated file for servering the app
                                   These files should not be edited directly
     app/                      --> All of the files to be used in production
@@ -65,9 +66,10 @@ brunch watch -s
 
     vendor/                   --> The vendor directory is can be used for 3rd Party libraries.
                                   Any files located in this directory will be included in js/vendor.js
-  bower.json                  --> Bower component config
-  config.coffee               --> Brunch config
-  package.json                --> node modules config
+    
+    bower.json                  --> Bower component config
+    config.coffee               --> Brunch config
+    package.json                --> node modules config
 
-  server.coffe                --> Custom server, allowing the file-upload feature
-
+    server.coffe                --> Custom server, allowing the file-upload feature
+```
