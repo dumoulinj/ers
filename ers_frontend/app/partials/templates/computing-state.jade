@@ -1,0 +1,5 @@
+i.fa.fa-2x.fa-circle-o(ng-if="state=='0'")
+span(ng-if="state=='1'", us-spinner="{lines: 11, radius:4, width:2, length:5, left:'25px', top:'10px'}", spinner-start-active="true")
+i.fa.fa-2x.fa-check-circle-o(ng-if="state=='2'", style="color: green")
+i.fa.fa-2x.fa-exclamation-triangle(ng-if="state=='3'", style="color: red")
+i.fa.fa-2x.fa-exclamation-circle(ng-if="state=='4'", style="color: orange")

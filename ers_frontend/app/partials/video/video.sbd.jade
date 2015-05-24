@@ -1,0 +1,63 @@
+div(ui-view)
+	div(ng-show="sbdResults != undefined && sbdResults.length == 0")
+		h3 No available shot boundaries detection results
+
+	div(ng-show="sbdResults != undefined && sbdResults.length > 0")
+		div.panel-group(ng-model="groundTruthPanel", role="tablist", aria-multiselectable="true", bs-collapse)
+			div.panel.panel-default()
+				div.panel-heading(role="tab")
+					h4.panel-title
+						a(bs-collapse-toggle) Ground truth
+
+				div.panel-collapse(role="tabpanel", bs-collapse-target)
+					div.panel-body
+						div.row
+							div.col-lg-12
+								p You can specify here a ground truth for the shot boundaries. It has to be a json list of values like for instance [12, 44, 108, 300]. Each value is a number of a shot boundary frame.
+
+						div.row(ng-show="video.shot_boundaries_ground_truth.length > 0")
+							div.col-lg-12
+								p Ground truth: {{ video.shot_boundaries_ground_truth }}
+						div.row
+							div.col-lg-2
+								button.btn.btn-sm.btn-default(data-toggle="tooltip", data-placement="right", title="Modify the ground truth for this video", ng-click="showUpdateSbdGtModal()")
+									span.glyphicon.glyphicon-pencil
+
+							div.col-lg-2
+								button.btn.btn-sm.btn-primary(ng-show="video.shot_boundaries_ground_truth.length > 0", ng-disabled="evaluatingSbd", data-toggle="tooltip", data-placement="right",title="Evaluate the shot boundaries results", ng-click="evaluateSbd()")
+									span.fa.fa-cogs.fa-lg
+
+		fieldset
+			legend Shot boundaries detection results
+
+		table.table.table-striped(st-table="displayedSbdResults", st-safe-src="sbdResults" )
+			thead
+				tr
+					th
+					th(st-sort="date")
+						a Date
+					th(st-sort="precision")
+						a Precision
+					th(st-sort="recall")
+						a Recall
+					th Configuration
+					th Comment
+					th
+
+			tbody
+				tr(ng-repeat="sbdResult in displayedSbdResults")
+					td
+						a.btn.btn-xs.btn-primary(role="button", ui-sref="video.sbd.detail({ sbdResultId: sbdResult.id })")
+							span.glyphicon.glyphicon-eye-open
+					td {{ sbdResult.date | date:'dd/MM/yyyy HH:mm:ss' }}
+					td
+						span(ng-if="sbdResult.precision != '-1'") {{ sbdResult.precision | limitTo:6 }}
+						span(ng-if="sbdResult.precision == '-1'") na
+					td
+						span(ng-if="sbdResult.recall != '-1'") {{ sbdResult.recall | limitTo:6 }}
+						span(ng-if="sbdResult.recall == '-1'") na
+					td {{ sbdResult.configuration_as_string }}
+					td {{ sbdResult.comment }}
+					td(ng-show="showSbdResultRemoveButton()")
+						button#btnRemove.btn.btn-xs.btn-danger(data-toggle="tooltip", data-placement="right", title="Remove this entry", ng-click="showRemoveSbdResultModal(sbdResult)")
+							span.glyphicon.glyphicon-trash

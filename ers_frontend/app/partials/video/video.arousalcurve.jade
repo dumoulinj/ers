@@ -1,0 +1,24 @@
+div(ng-if="!hasArousal()")
+	h3 Arousal not modeled for this video
+div(ng-if="hasArousal()")
+	div.row
+		div.col-lg-10.col-lg-offset-1
+			nvd3-line-chart#arousalCurveId(
+				data="arousal_curve"
+				showXAxis="true"
+				showYAxis="true"
+				tooltips="false"
+				interactive="true"
+				height="400"
+				yAxisTickValues="[0, 0.5, 1]"
+				forcey="[0, 1]"
+				xAxisTickFormat="xAxisTickFormatFunction()"
+				yAxisTickFormat="yAxisTickFormatFunction()"
+				xAxisLabel="Duration [s]"
+				yAxisLabel="Arousal"
+				showLegend="true"
+				clipVoronoi="false"
+				useInteractiveGuideLine="false"
+				margin='{left:80,top:30,bottom:80,right:30}'
+			)
+				svg

@@ -1,0 +1,72 @@
+div(ng-if="!hasFeatures()")
+	h3 No features available for this video
+div(ng-if="hasFeatures()")
+	div(ng-repeat="features in allFeatures")
+		h4 Feature type: {{ features.title | capitalize }}
+		div.pull-right
+			button.btn.btn-xs.btn-danger(ng-click="removeFeature(features.type)", data-toggle="tooltip", data-placement="bottom", title="Remove this feature")
+				span.glyphicon.glyphicon-trash
+
+		div
+			nvd3-line-chart(
+			id="features_{{features.type}}_0"
+			data="features.value.data"
+			showXAxis="true"
+			showYAxis="true"
+			tooltips="true"
+			interactive="true"
+			height="400"
+			xAxisTickFormat="xAxisTickFormatFunction()"
+			yAxisTickFormat="yAxisTickFormatFunction()"
+			xAxisLabel="Duration [s]"
+			yAxisLabel="{{ features.title | capitalize }}"
+			showLegend="true"
+			clipVoronoi="false"
+			useInteractiveGuideLine="false"
+			margin='{left:80,top:30,bottom:80,right:30}'
+			)
+
+		div(ng-show="getSize(features.functionFeatures) > 1")
+			h5 Functions
+			div
+				button.btn.btn-xs.btn-primary(ng-click="checkAllFeatures(features.type)", data-placement="left", data-title="Select all functions", data-toggle="tooltip")
+					span.glyphicon.glyphicon-check
+				button.btn.btn-xs.btn-primary(ng-click="uncheckAllFeatures(features.type)", data-placement="right", data-title="Deselect all functions", data-toggle="tooltip")
+					span.glyphicon.glyphicon-unchecked
+
+			div
+				form.inline
+					div.row
+						div.col-lg-2(ng-repeat="functionFeatures in features.functionFeatures")
+							div.checkbox
+								label
+									input(type="checkbox", ng-model="showFeatures[features.type][functionFeatures.type]")
+									span {{ functionFeatures.title | capitalize }}
+
+		div(ng-repeat="functionFeatures in features.functionFeatures")
+			div(ng-show="showFeatures[features.type][functionFeatures.type]")
+				h6(ng-show="functionFeatures.title != 'none'") Function: {{ functionFeatures.title | capitalize }}
+				div
+					nvd3-line-chart(
+						id="features_{{features.type}}_{{functionFeatures.type}}"
+						data="functionFeatures.data"
+						showXAxis="true"
+						showYAxis="true"
+						tooltips="true"
+						interactive="true"
+						height="400"
+						xAxisTickFormat="xAxisTickFormatFunction()"
+						yAxisTickFormat="yAxisTickFormatFunction()"
+						xAxisLabel="Duration [s]"
+						yAxisLabel="{{ features.title | capitalize }}"
+						showLegend="true"
+						clipVoronoi="false"
+						useInteractiveGuideLine="false"
+						margin='{left:80,top:30,bottom:80,right:30}'
+					)
+
+
+	h3 Add features
+	select(ng-model="addFeature.feature", ng-options="feature.value as feature.label group by feature.type for feature in availableFeatures | orderBy:['type','label']")
+	button.btn.btn-sm.btn-primary(ng-click="addFeature()", data-toggle="tooltip", data-placement="right", title="Add a new feature", ng-show="showAddFeatureButton()")
+		span.glyphicon.glyphicon-plus

@@ -1,0 +1,629 @@
+a#btnBack.btn.btn-lg.btn-link(ui-sref="datasets.list", data-toggle="tooltip", data-placement="left", title="Go back to datasets")
+	span.glyphicon.glyphicon-chevron-left
+
+h3
+	span.label.label-default {{ dataset.name }}
+
+br
+
+// ---------------------------------------------------------------------------------------------------------------------
+// General information
+// ---------------------------------------------------------------------------------------------------------------------
+div.well
+	div.pull-right
+		button#btnEdit.btn.btn-sm.btn-primary(ng-show="!editMode", ng-hide="createMode", ng-click="edit()", data-toggle="tooltip", data-placement="bottom", title="Edit this dataset")
+			span.glyphicon.glyphicon-pencil
+
+		button#btnRemove.btn.btn-sm.btn-danger(ng-show="!editMode", ng-hide="createMode", data-toggle="tooltip", data-placement="bottom", title="Remove this dataset", ng-click="showRemoveModal()")
+			span.glyphicon.glyphicon-trash
+	form.form-horizontal(name="datasetForm", ng-submit="submitDatasetForm(datasetForm.$valid)", novalidate)
+		fieldset
+			legend General information
+
+			div.form-group(ng-class="{ 'has-error' : datasetForm.inputName.$invalid && !datasetForm.inputName.$pristine }")
+				label.col-lg-2.control-label(for="inputName") Name
+				div.col-lg-10
+					input.form-control(type="text", name="inputName", placeholder="Enter dataset name here", ng-model="dataset.name", ng-disabled="!createMode", required)
+					p.help-block(ng-show="datasetForm.inputName.$invalid && !datasetForm.inputName.$pristine") Dataset name is required
+					
+			div.form-group(ng-class="{ 'has-error' : datasetForm.inputDescription.$invalid && !datasetForm.inputDescription.$pristine }")
+				label.col-lg-2.control-label(for="inputDescription") Description
+				div.col-lg-10
+					textarea.form-control(rows="3", name="inputDescription", placeholder="Enter dataset description here", ng-model="dataset.description", ng-disabled="!editMode && !createMode", required)
+					p.help-block(ng-show="datasetForm.inputDescription.$invalid && !datasetForm.inputDescription.$pristine") Dataset description is required
+			div(ng-hide="editMode || createMode")
+				div.form-group
+					label.col-lg-2.control-label Number of videos
+					div.col-lg-10
+						label {{dataset.nb_videos}}
+
+				div.form-group
+					label.col-lg-2.control-label Base path
+					div.col-lg-10
+						label {{dataset.base_path}}
+
+				div.col-lg-offset-2.panel-group(ng-model="additionalPathsActivePanels", role="tablist", aria-multiselectable="true", bs-collapse)
+					div.panel.panel-default()
+						div.panel-heading(role="tab")
+							h4.panel-title
+								a(bs-collapse-toggle) Additional paths
+
+						div.panel-collapse(role="tabpanel", bs-collapse-target)
+							div.panel-body
+								div.form-group
+									label.col-lg-2.control-label Video
+									div.col-lg-10
+										label {{dataset.video_path}}
+
+								div.form-group
+									label.col-lg-2.control-label Audio
+									div.col-lg-10
+										label {{dataset.audio_path}}
+
+								div.form-group
+									label.col-lg-2.control-label Extracted frames
+									div.col-lg-10
+										label {{dataset.frame_path}}
+
+								div.form-group
+									label.col-lg-2.control-label Ground truths
+									div.col-lg-10
+										label {{dataset.ground_truth_path}}
+
+								div.form-group
+									label.col-lg-2.control-label Shot boundaries ground truth
+									div.col-lg-10
+										label {{dataset.shot_boundaries_ground_truth_path}}
+
+				div.col-lg-offset-2.panel-group(role="tablist", aria-multiselectable="true", bs-collapse)
+					div.panel.panel-default()
+						div.panel-heading(role="tab")
+							h4.panel-title
+								a(bs-collapse-toggle) Monitoring
+
+						div.panel-collapse(role="tabpanel", bs-collapse-target)
+							div.panel-body
+								div.row
+									div.col-lg-1
+										computing-state(state="dataset.preparation_state")
+									div.col-lg-10
+										p Preparation
+
+								div.row
+									div.col-lg-1
+										computing-state(state="dataset.scan_state")
+									div.col-lg-10 Scan video folder
+
+								div.row
+									div.col-lg-1
+										computing-state(state="dataset.videos_preparation_state")
+									div.col-lg-3
+										span Videos preparation
+									div.col-lg-8(ng-show="dataset.videos_preparation_state=='1'")
+										span ({{dataset.videos_preparation_nb_videos_done}}/{{dataset.nb_videos}})
+										div.progress
+											div.progress-bar.progress-bar-striped.active(role="progressbar", aria-valuemin="0", aria-valuemax="dataset.nb_videos", aria-valuenow="dataset.videos_preparation_nb_videos_done", style="width: {{ 1+(dataset.videos_preparation_nb_videos_done / dataset.nb_videos)  *100 }}%")
+												span.sr-only {{dataset.videos_preparation_nb_videos_done}} done on {{dataset.nb_videos}}
+
+								div.row
+									div.col-lg-1
+										computing-state(state="dataset.shot_boundaries_detection_state")
+									div.col-lg-3
+										span Shot boundaries detection
+									div.col-lg-8(ng-show="dataset.shot_boundaries_detection_state=='1'")
+										span ({{dataset.shot_boundaries_detection_nb_videos_done}}/{{dataset.nb_videos}})
+										div.progress
+											div.progress-bar.progress-bar-striped.active(role="progressbar", aria-valuemin="0", aria-valuemax="dataset.nb_videos", aria-valuenow="dataset.shot_boundaries_detection_nb_videos_done", style="width: {{ 1+(dataset.shot_boundaries_detection_nb_videos_done / dataset.nb_videos)  *100 }}%")
+												span.sr-only {{dataset.shot_boundaries_detection_nb_videos_done}} done on {{dataset.nb_videos}}
+
+								div.row
+									div.col-lg-1
+										computing-state(state="dataset.feature_extraction_state")
+									div.col-lg-3
+										span Features extraction
+									div.col-lg-8(ng-show="dataset.feature_extraction_state=='1'")
+										span ({{dataset.feature_extraction_nb_videos_done}}/{{dataset.nb_videos}})
+										div.progress
+											div.progress-bar.progress-bar-striped.active(role="progressbar", aria-valuemin="0", aria-valuemax="dataset.nb_videos", aria-valuenow="dataset.feature_extraction_nb_videos_done", style="width: {{ 1+(dataset.feature_extraction_nb_videos_done / dataset.nb_videos)  *100 }}%")
+												span.sr-only {{dataset.feature_extraction_nb_videos_done}} done on {{dataset.nb_videos}}
+
+								div.row
+									div.col-lg-1
+										computing-state(state="dataset.arousal_modeling_state")
+									div.col-lg-3
+										span Arousal modeling
+									div.col-lg-8(ng-show="dataset.arousal_modeling_state=='1'")
+										span ({{dataset.arousal_modeling_nb_videos_done}}/{{dataset.nb_videos}})
+										div.progress
+											div.progress-bar.progress-bar-striped.active(role="progressbar", aria-valuemin="0", aria-valuemax="dataset.nb_videos", aria-valuenow="dataset.arousal_modeling_nb_videos_done", style="width: {{ 1+(dataset.arousal_modeling_nb_videos_done / dataset.nb_videos)  *100 }}%")
+												span.sr-only {{dataset.arousal_modeling_nb_videos_done}} done on {{dataset.nb_videos}}
+
+
+
+
+			div.form-group
+				div.col-lg-10.col-lg-offset-2					
+					button.btn.btn-default(ng-show="editMode", ng-click="cancel()") Cancel
+					button.btn.btn-success(type="submit", ng-show="createMode", ng-disabled="datasetForm.$invalid") Create
+					button.btn.btn-primary(type="submit", ng-show="editMode", ng-disabled="datasetForm.$invalid") Save
+
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Manage dataset
+// ---------------------------------------------------------------------------------------------------------------------
+div.well(ng-hide="editMode || createMode")
+	form.form-horizontal
+		fieldset
+			legend Manage dataset
+
+		div(bs-active-pane="manageTabs.activeTab", bs-tabs)
+			div(title="1 - Videos preparation", bs-pane, disabled="{{!readyForVideosPreparation}}")
+				br
+				fieldset
+					legend 1 - Add videos
+				div
+					button.btn.btn-sm.btn-primary(type='button', ng-click="scanVideoFolder()", ng-disabled="dataset.scan_state=='1'", data-toggle="tooltip", data-placement="left", title="Scan the video folder to find existing videos")
+						span.glyphicon.glyphicon-search
+					button.btn.btn-sm.btn-primary(type="button", ng-model="addVideo", bs-checkbox, data-placement="right", data-title="Upload videos to the server by adding them directly in the browser", data-toggle="tooltip")
+						span.glyphicon.glyphicon-upload
+
+				div(ng-show="addVideo")
+					style.
+						.my-drop-zone { border: dotted 3px lightgray; }
+						.nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
+						.another-file-over-class { border: dotted 3px green; }
+						html, body { height: 100%; }
+					div(nv-file-drop='', uploader='uploader', filters='queueLimit, customFilter')
+						.row
+							.col-md-3
+								h3 Choose emotion
+								select(ng-model="uploader.emotion", ng-options="emotion.value as emotion.label group by emotion.type for emotion in emotions | orderBy:['type','label']", placeholder="Filter by emotion...", )
+
+								h3 Select files
+								div(ng-show='uploader.isHTML5')
+									// 3. nv-file-over uploader="link" over-class="className"
+									.well.my-drop-zone(nv-file-over='', uploader='uploader')
+										| Drop files here
+								// Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}"
+								| Multiple
+								input(type='file', nv-file-select='', uploader='uploader', multiple='')
+
+							.col-md-9(style='margin-bottom: 40px')
+								h3 Upload queue
+								p Queue length: {{ uploader.queue.length }}
+								table.table
+									thead
+										tr
+											th(width='50%') Name
+											th(ng-show='uploader.isHTML5') Size
+											th(ng-show='uploader.isHTML5') Progress
+											th Status
+											th Actions
+									tbody
+										tr(ng-repeat='item in uploader.queue')
+											td
+												strong {{ item.file.name }}
+											td(ng-show='uploader.isHTML5', nowrap='') {{ item.file.size/1024/1024|number:2 }} MB
+											td(ng-show='uploader.isHTML5')
+												.progress(style='margin-bottom: 0;')
+													.progress-bar(role='progressbar', ng-style='{ "width": item.progress + "%" }')
+											td.text-center
+												span(ng-show='item.isSuccess')
+													i.glyphicon.glyphicon-ok
+												span(ng-show='item.isCancel')
+													i.glyphicon.glyphicon-ban-circle
+												span(ng-show='item.isError')
+													i.glyphicon.glyphicon-remove
+											td(nowrap='')
+												button.btn.btn-success.btn-xs(type='button', ng-click='item.upload()', ng-disabled='item.isReady || item.isUploading || item.isSuccess')
+													span.glyphicon.glyphicon-upload
+													| &nbsp; Upload
+												button.btn.btn-warning.btn-xs(type='button', ng-click='item.cancel()', ng-disabled='!item.isUploading')
+													span.glyphicon.glyphicon-ban-circle
+													| &nbsp; Cancel
+												button.btn.btn-danger.btn-xs(type='button', ng-click='item.remove()')
+													span.glyphicon.glyphicon-trash
+													| &nbsp; Remove
+								div
+									div
+										| Queue progress:
+										.progress(style='')
+											.progress-bar(role='progressbar', ng-style='{ "width": uploader.progress + "%" }')
+									button.btn.btn-success.btn-s(type='button', ng-click='uploader.uploadAll()', ng-disabled='!uploader.getNotUploadedItems().length')
+										span.glyphicon.glyphicon-upload
+										| Upload all
+									button.btn.btn-warning.btn-s(type='button', ng-click='uploader.cancelAll()', ng-disabled='!uploader.isUploading')
+										span.glyphicon.glyphicon-ban-circle
+										| Cancel all
+									button.btn.btn-danger.btn-s(type='button', ng-click='uploader.clearQueue()', ng-disabled='!uploader.queue.length')
+										span.glyphicon.glyphicon-trash
+										| Remove all
+
+				br
+
+				div.row(ng-show="dataset.scan_state!='0'")
+					div.col-lg-2 Scan video folder state
+					div.col-lg-1
+						computing-state(state="dataset.scan_state")
+
+				br
+
+				div(ng-show="hasVideos()")
+					fieldset
+						legend 2 - Prepare videos
+
+					div.row
+						div.col-lg-1
+							button.btn.btn-sm.btn-primary(type='button', ng-click="prepareVideos(prepareVideos.overwrite)", ng-disabled="preparingVideos", data-placement="bottom", data-title="Prepare each videos of the dataset", data-toggle="tooltip")
+								span.fa.fa-cogs.fa-lg
+						div.col-lg-2
+							div.checkbox
+								label(data-placement="right", data-title="Overwrite existing videos", data-toggle="tooltip")
+									input(type="checkbox", ng-model="prepareVideos.overwrite")
+									span Overwrite
+
+					br
+
+					div.row(ng-show="dataset.videos_preparation_state!='0'")
+						div.col-lg-2
+							span Videos preparation state
+						div.col-lg-1
+							computing-state(state="dataset.videos_preparation_state")
+						div.col-lg-6(ng-show="dataset.videos_preparation_state=='1'")
+							span ({{dataset.videos_preparation_nb_videos_done}}/{{dataset.nb_videos}})
+							div.progress
+								div.progress-bar.progress-bar-striped.active(role="progressbar", aria-valuemin="0", aria-valuemax="dataset.nb_videos", aria-valuenow="dataset.videos_preparation_nb_videos_done", style="width: {{ 1+(dataset.videos_preparation_nb_videos_done / dataset.nb_videos)  *100 }}%")
+									span.sr-only {{dataset.videos_preparation_nb_videos_done}} done on {{dataset.nb_videos}}
+
+
+			div(title="2 - Shot boundaries detection", bs-pane, disabled="{{!readyForShotBoundariesDetection}}")
+				//div(ng-show="readyForTask.shotBoundariesDetection")
+				//	h4 You first need to prepare videos in order to proceed with shot boundaries detection.
+				//div(ng-show="!readyForTask.shotBoundariesDetection")
+				br
+
+				form.form-inline
+					fieldset
+						legend 1 - Configure shot boundaries detection
+
+					button.btn.btn-sm.btn-primary(ng-model="sbd.addAlgorithm", bs-checkbox, data-toggle="tooltip", data-placement="right", title="Add a new algorithm to the configuration")
+						span.glyphicon.glyphicon-plus
+
+					br
+					br
+
+					div(ng-show="sbd.addAlgorithm")
+							div
+								div.row
+									div.col-lg-2
+										label(for="algorithmGlobalThreshold") Global threshold
+									div.col-lg-2
+										input#algorithmGlobalThreshold.form-control(type="number", ng-model="sbd.globalThreshold", min=0, max=1, step="0.01")
+
+								br
+
+								div.row
+									div.col-lg-2
+										label(for="algorithmType") Algorithm
+									div.col-lg-2
+										button.btn.btn-default.btn-sm(type="button", ng-model="sbd.algorithm.value", bs-options="algorithm.value as algorithm.label for algorithm in sbd.algorithms", placeholder="Choose an algorithm...", bs-select)
+											Action
+												span.caret
+
+									div.col-lg-2
+										label(for="algorithmWeight") Weight
+									div.col-lg-2
+										input#algorithmWeight.form-control(type="number", ng-model="sbd.weight", min=1)
+
+									div.col-lg-2
+										button.btn.btn-sm.btn-success(ng-show="(sbd.algorithm.value!=null) && (sbd.weight!= null) && (sbd.globalThreshold != null)", ng-click="addSBDAlgo()", data-toggle="tooltip", data-placement="right", title="Add the algorithm")
+											span.glyphicon.glyphicon-plus
+
+							br
+
+					table.table(ng-show="sbd.configuration.length")
+						thead
+							tr
+								th
+									| Algorithm
+								th
+									| Weight
+								th
+						tbody
+							tr(ng-repeat="algorithm in sbd.configuration")
+								td(data-title="'Algorithm'") {{ algorithm.label }}
+								td(data-title="'Weight'") {{ algorithm.weight }}
+								td(data-title = "'Delete'")
+									button.btn.btn-xs.btn-danger(data-toggle="tooltip", data-placement="right", ng-click="removeSBDAlgo(algorithm)", title="Remove this algorithm")
+										span.glyphicon.glyphicon-trash
+
+				div(ng-show="sbd.configuration.length")
+					fieldset
+						legend 2 - Detect shot boundaries
+
+					div.row
+						div.col-lg-2
+							button.btn.btn-sm.btn-primary(type='button', ng-click="detectShotBoundaries()", ng-disabled="detectingShotBoundaries", data-toggle="tooltip", data-placement="right", title="Launch the shot boundaries detection task")
+								span.fa.fa-cogs.fa-lg
+
+					br
+
+					div.row(ng-show="dataset.shot_boundaries_detection_state!='0'")
+						div.col-lg-2
+							span Shot boundaries detection state
+						div.col-lg-1
+							computing-state(state="dataset.shot_boundaries_detection_state")
+						div.col-lg-6(ng-show="dataset.shot_boundaries_detection_state=='1'")
+							span ({{dataset.shot_boundaries_detection_nb_videos_done}}/{{dataset.nb_videos}})
+							div.progress
+								div.progress-bar.progress-bar-striped.active(role="progressbar", aria-valuemin="0", aria-valuemax="dataset.nb_videos", aria-valuenow="dataset.shot_boundaries_detection_nb_videos_done", style="width: {{ 1+(dataset.shot_boundaries_detection_nb_videos_done / dataset.nb_videos)  *100 }}%")
+									span.sr-only {{dataset.shot_boundaries_detection_nb_videos_done}} done on {{dataset.nb_videos}}
+
+			div(title="3 - Features extraction", bs-pane, disabled="{{!readyForFeatureExtraction}}")
+				br
+
+				fieldset
+					legend 1 - Select features
+
+				div.panel-group(role="tablist", ng-model="featuresSelectionActivePanels", data-allow-multiple="true", aria-multiselectable="true", bs-collapse)
+					div.panel.panel-default()
+						div.panel-heading(role="tab")
+							h4.panel-title
+								a(bs-collapse-toggle) Audio features
+
+						div.panel-collapse(role="tabpanel", bs-collapse-target)
+							div.panel-body
+								div.row
+									div.col-lg-3
+										div.pull-left
+											span.glyphicon.glyphicon-filter
+										div.pull-left
+											input.input-sm.form-control(placeholder="Filter by feature name", type="search", ng-model="filterAudioFeaturesBy.label")
+									div.col-lg-2(ng-hide="filterAudioFeaturesBy.label")
+										div
+											button.btn.btn-xs.btn-primary(ng-click="checkAllFeatures('audio', 'features')", data-placement="left", data-title="Select all audio features", data-toggle="tooltip")
+												span.glyphicon.glyphicon-check
+											button.btn.btn-xs.btn-default(ng-click="uncheckAllFeatures('audio', 'features')", data-placement="right", data-title="Deselect all audio features", data-toggle="tooltip")
+												span.glyphicon.glyphicon-unchecked
+								br
+
+								form.inline
+									div.col-lg-4(ng-repeat="featureType in audioFeatureTypes | filter : filterAudioFeaturesBy")
+										div.checkbox
+											label
+												input(type="checkbox", checklist-model="selectedFeatures.audio", checklist-value="featureType.value")
+												span {{ featureType.label | capitalize }}
+
+					div.panel.panel-default()
+						div.panel-heading(role="tab")
+							h4.panel-title
+								a(bs-collapse-toggle) Video features
+
+						div.panel-collapse(role="tabpanel", bs-collapse-target)
+							div.panel-body
+								div.row
+									div.col-lg-3
+										div.pull-left
+											span.glyphicon.glyphicon-filter
+										div.pull-left
+											input.input-sm.form-control(placeholder="Filter by feature name", type="search", ng-model="filterVideoFeaturesBy.label")
+									div.col-lg-2(ng-hide="filterVideoFeaturesBy.label")
+										div
+											button.btn.btn-xs.btn-primary(ng-click="checkAllFeatures('video', 'features')", data-placement="left", data-title="Select all video features", data-toggle="tooltip")
+												span.glyphicon.glyphicon-check
+											button.btn.btn-xs.btn-default(ng-click="uncheckAllFeatures('video', 'features')", data-placement="right", data-title="Deselect all video features", data-toggle="tooltip")
+												span.glyphicon.glyphicon-unchecked
+
+								br
+
+								form.inline
+									div.col-lg-4(ng-repeat="featureType in videoFeatureTypes | filter : filterVideoFeaturesBy")
+										div.checkbox
+											label
+												input(type="checkbox", checklist-model="selectedFeatures.video", checklist-value="featureType.value")
+												span {{ featureType.label| capitalize }}
+
+				br
+
+				div(ng-show="selectedFeatures.video.length > 0 || selectedFeatures.audio.length > 0")
+					fieldset
+						legend 2 - Extract features
+
+					div.row
+						div.col-lg-1
+							button.btn.btn-sm.btn-primary(type='button', ng-click="extractFeatures()", ng-disabled="extractingFeatures", data-toggle="tooltip", data-placement="right", title="Launch the features extraction task")
+								span.fa.fa-cogs.fa-lg
+						div.col-lg-2
+							div.checkbox
+								label(data-placement="right", data-title="Overwrite existing features", data-toggle="tooltip")
+									input(type="checkbox", ng-model="extractFeatures.overwrite")
+									span Overwrite
+
+					br
+
+					div.row(ng-show="dataset.feature_extraction_state!='0'")
+						div.col-lg-2
+							span Features extraction state
+						div.col-lg-1
+							computing-state(state="dataset.feature_extraction_state")
+						div.col-lg-6(ng-show="dataset.feature_extraction_state=='1'")
+							span ({{dataset.feature_extraction_nb_videos_done}}/{{dataset.nb_videos}})
+							div.progress
+								div.progress-bar.progress-bar-striped.active(role="progressbar", aria-valuemin="0", aria-valuemax="dataset.nb_videos", aria-valuenow="dataset.feature_extraction_nb_videos_done", style="width: {{ 1+(dataset.feature_extraction_nb_videos_done / dataset.nb_videos)  *100 }}%")
+									span.sr-only {{dataset.feature_extraction_nb_videos_done}} done on {{dataset.nb_videos}}
+
+			div(title="4 - Arousal modeling", bs-pane, disabled="{{!readyForArousalModeling}}")
+				br
+
+				fieldset
+					legend 1 - Select features
+
+
+				p
+					i Only the features already extracted are available
+
+				br
+
+				div.panel-group(role="tablist", ng-model="arousalFeaturesSelectionActivePanels", data-allow-multiple="true", aria-multiselectable="true", bs-collapse)
+					div.panel.panel-default(ng-show="arousalAudioFeatureTypes.length > 0")
+						div.panel-heading(role="tab")
+							h4.panel-title
+								a(bs-collapse-toggle) Audio features
+
+						div.panel-collapse(role="tabpanel", bs-collapse-target)
+							div.panel-body
+								div.row(ng-show="arousalAudioFeatureTypes.length > 1")
+									div.col-lg-3
+										div.pull-left
+											span.glyphicon.glyphicon-filter
+										div.pull-left
+											input.input-sm.form-control(placeholder="Filter by feature name", type="search", ng-model="filterArousalAudioFeaturesBy.label")
+									div.col-lg-2(ng-hide="filterArousalAudioFeaturesBy.label")
+										button.btn.btn-xs.btn-primary(ng-click="checkAllFeatures('audio', 'arousal')", data-placement="left", data-title="Select all audio features", data-toggle="tooltip")
+											span.glyphicon.glyphicon-check
+										button.btn.btn-xs.btn-default(ng-click="uncheckAllFeatures('audio', 'arousal')", data-placement="right", data-title="Deselect all audio features", data-toggle="tooltip")
+											span.glyphicon.glyphicon-unchecked
+									br
+
+								form.inline
+									div.col-lg-4(ng-repeat="featureType in arousalAudioFeatureTypes | filter : filterArousalAudioFeaturesBy")
+										div.checkbox
+											label
+												input(type="checkbox", checklist-model="arousalSelectedFeatures.audio", checklist-value="featureType.value")
+												span {{ featureType.label | capitalize }}
+
+					div.panel.panel-default(ng-show="arousalVideoFeatureTypes.length > 0")
+						div.panel-heading(role="tab")
+							h4.panel-title
+								a(bs-collapse-toggle) Video features
+
+						div.panel-collapse(role="tabpanel", bs-collapse-target)
+							div.panel-body
+								div.row(ng-show="arousalVideoFeatureTypes.length > 1")
+									div.col-lg-3
+										div.pull-left
+											span.glyphicon.glyphicon-filter
+										div.pull-left
+											input.input-sm.form-control(placeholder="Filter by feature name", type="search", ng-model="filterArousalVideoFeaturesBy.label")
+									div.col-lg-2(ng-hide="filterArousalVideoFeaturesBy.label")
+										button.btn.btn-xs.btn-primary(ng-click="checkAllFeatures('video', 'arousal')", data-placement="left", data-title="Select all video features", data-toggle="tooltip")
+											span.glyphicon.glyphicon-check
+										button.btn.btn-xs.btn-default(ng-click="uncheckAllFeatures('video', 'arousal')", data-placement="right", data-title="Deselect all video features", data-toggle="tooltip")
+											span.glyphicon.glyphicon-unchecked
+
+									br
+
+								form.inline
+									div.col-lg-4(ng-repeat="featureType in arousalVideoFeatureTypes | filter : filterArousalVideoFeaturesBy")
+										div.checkbox
+											label
+												input(type="checkbox", checklist-model="arousalSelectedFeatures.video", checklist-value="featureType.value")
+												span {{ featureType.label| capitalize }}
+
+				br
+
+				div(ng-show="arousalSelectedFeatures.video.length > 0 || arousalSelectedFeatures.audio.length > 0")
+					fieldset
+						legend 2 - Model arousal
+
+					div.row
+						div.col-lg-1
+							button.btn.btn-sm.btn-primary(type='button', ng-click="modelArousal()", ng-disabled="modelingArousal", data-toggle="tooltip", data-placement="right", title="Launch the arousal modeling task")
+								span.fa.fa-cogs.fa-lg
+						div.col-lg-2
+							div.checkbox
+								label(data-placement="right", data-title="Overwrite existing arousal", data-toggle="tooltip")
+									input(type="checkbox", ng-model="modelArousal.overwrite")
+									span Overwrite
+
+					br
+
+					div.row(ng-show="dataset.arousal_modeling_state!='0'")
+						div.col-lg-2
+							span Arousal modeling state
+						div.col-lg-1
+							computing-state(state="dataset.arousal_modeling_state")
+						div.col-lg-6(ng-show="dataset.arousal_modeling_state=='1'")
+							span ({{dataset.arousal_modeling_nb_videos_done}}/{{dataset.nb_videos}})
+							div.progress
+								div.progress-bar.progress-bar-striped.active(role="progressbar", aria-valuemin="0", aria-valuemax="dataset.nb_videos", aria-valuenow="dataset.arousal_modeling_nb_videos_done", style="width: {{ 1+(dataset.arousal_modeling_nb_videos_done / dataset.nb_videos)  *100 }}%")
+									span.sr-only {{dataset.arousal_modeling_nb_videos_done}} done on {{dataset.nb_videos}}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Videos
+// ---------------------------------------------------------------------------------------------------------------------
+div.well(ng-hide="editMode || createMode")
+	form.form-horizontal
+		fieldset
+			legend Videos
+
+			div(ng-hide="hasVideos()")
+				p This dataset currently has no videos. You can:
+				ul
+					li Add videos to the video folder and click the "Scan video" button,
+					li or directly use the file uploader by clicking the "Add videos" button.
+
+			div(ng-show="hasVideos()")
+				div.row
+					div.col-lg-2
+						div.pull-left
+							span.glyphicon.glyphicon-filter
+						div.pull-left(style="margin-left: 5px;")
+							input.input-sm.form-control(placeholder="Filter by name", type="search", ng-model="filterBy.name")
+					div.col-lg-3
+						div.pull-left
+							label Filter by emotion:
+						div.pull-left(style="margin-left: 5px;")
+							select(ng-model="filterBy.emotion", ng-options="emotion.value as emotion.label group by emotion.type for emotion in emotions | orderBy:['type','label']", placeholder="Filter by emotion...", )
+					div.col-lg-2(ng-show="filterBy.emotion != undefined || filterBy.name")
+						button.btn.btn-xs(type="button", ng-click="clearFilters()", data-toggle="tooltip", data-placement="right", title="Clear all table filters", width="100%")
+							span.glyphicon.glyphicon-ban-circle
+
+				table.table.table-striped(st-table="displayedVideos", st-safe-src="videos" )
+					thead
+						tr
+							th
+							th(st-sort="name")
+								a Name
+							th(st-sort="emotion")
+								a Emotion
+							th(st-sort="duration")
+								a Duration [s]
+							th Monitoring
+							th
+					tbody
+						tr(ng-repeat="video in displayedVideos | filter:filterBy")
+							td.col-lg-1
+								a.btn.btn-xs.btn-primary(role="button", ng-show="video.preparation_state==2 || video.preparation_state==4", ui-sref="video.info({ videoId: video.id })")
+									span.glyphicon.glyphicon-eye-open
+							td
+								{{ video.name }}
+							td
+								span(ng-show="!manageMode") {{getters.emotion(video.emotion)}}
+								button.btn.btn-default.btn-sm(type="button", ng-model="video.emotion", bs-options="emotion.value as emotion.label for emotion in emotions", bs-select, ng-show="manageMode")
+									Action
+										span.caret
+							td {{video.duration}}
+							td.col-lg-4
+								div.row
+									div.col-lg-1
+										computing-state(state="video.preparation_state")
+									div.col-lg-10 Preparation
+
+								div.row
+									div.col-lg-1
+										computing-state(state="video.shot_boundaries_detection_state")
+									div.col-lg-10 Shot boundaries detection
+
+								div.row
+									div.col-lg-1
+										computing-state(state="video.feature_extraction_state")
+									div.col-lg-10 Feature extraction
+
+								div.row
+									div.col-lg-1
+										computing-state(state="video.arousal_modeling_state")
+									div.col-lg-10 Arousal modeling
+							td
+								button.btn.btn-xs.btn-danger(data-toggle="tooltip", data-placement="right", title="Remove this video", ng-click="showRemoveVideoModal(video.id)")
+									span.glyphicon.glyphicon-trash

@@ -1,0 +1,14 @@
+div.modal
+	div.modal-dialog
+		div.modal-content		
+			div.modal-header(ng-show="title")
+				button.close(type="button", ng-click="$hide()", aria-hidden="true") &times;
+				h4.modal-title {{ title }}
+
+			div.modal-body(ng-show="content")
+				p {{ content }}
+				textarea(cols="40", rows="5", ng-model="csvVal")
+
+			div.modal-footer
+				button.btn.btn-default(type="button", ng-click="$hide()") Cancel				
+				button.btn(ng-repeat="button in buttons", ng-class="button.class", ng-click="button.callback({ csv: csvVal }); $hide()") {{ button.text }}

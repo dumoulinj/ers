@@ -1,0 +1,23 @@
+a#btnCreate.btn.btn-success(role="button", ui-sref="datasets.detail({ datasetId: -1 })", data-toggle="tooltip", data-placement="right", title="Create a new dataset")
+	span.glyphicon.glyphicon-plus-sign
+
+br
+br
+
+input.form-control(type="text", placeholder="Filter by dataset name", ng-model="datasetFilter.name")
+
+br
+
+ul.list-group.col-lg-6(ng-repeat="dataset in datasets | filter:datasetFilter")
+	a.list-group-item(ui-sref="datasets.detail({ datasetId: dataset.id })")
+		h3.list-group-item-heading {{ dataset.name }}
+		p
+			b Base path:
+			|  {{ dataset.base_path }}
+		p
+			b Number of videos:
+			|  {{ dataset.nb_videos }}
+		p
+			b Description:
+			|  {{ dataset.description | limitTo:70 }}
+			span(ng-show="dataset.description.length > 70") ...

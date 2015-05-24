@@ -1,0 +1,60 @@
+style
+	.nv-y text {display: none}
+
+	.nv-y .nv-axisMaxMin {display: none}
+
+div.row
+	div.col-lg-10.col-lg-offset-1.border
+		nvd3-scatter-chart#shotCurveId(
+			data="shotBoundariesData"
+			showXAxis="true"
+			showYAxis = "false"
+			interactive="true"
+			height="150"
+			forcex="[0]"
+			xAxisTickFormat="xAxisTickFormatFunction()"
+			xAxisLabel="Duration [s]"
+			showLegend="false"
+			useInteractiveGuideLine="false"
+			shape="shapeFunction()"
+			margin='{left:80,top:30,bottom:80,right:30}'
+			color="colorFunction()"
+		)
+			svg
+
+//div.row(ng-show="showThumb")
+//	div.text-center
+//		img(err-SRC="",ng-src="{{ linkStart }}")
+//		img(err-SRC="",ng-src="{{ linkMid }}")
+//		img(err-SRC="",ng-src="{{ linkEnd }}")
+
+br
+
+div.well
+	form.form-horizontal()
+		fieldset
+			legend Shot boundaries detection result detail
+			div.form-group
+				label.col-lg-2.control-label(for="inputDate") Date
+				div.col-lg-10
+					input.form-control(type="text", name="inputDate", ng-model="sbdResult.formattedDate", ng-disabled="true")
+			div.form-group
+				label.col-lg-2.control-label(for="inputPrecision") Precision
+				div.col-lg-10
+					input.form-control(type="text", name="inputPrecision", ng-model="sbdResult.precision", ng-disabled="true")
+			div.form-group
+				label.col-lg-2.control-label(for="inputDate") Recall
+				div.col-lg-10
+					input.form-control(type="text", name="inputRecall", ng-model="sbdResult.recall", ng-disabled="true")
+			div.form-group
+				label.col-lg-2.control-label(for="inputComment") Comment
+				div.col-lg-10
+					textarea.form-control(cols="40",rows="5", name="inputComment", placeholder="Enter the comment here", ng-model="sbdResult.comment")
+			div.form-group
+				div.col-lg-10.col-lg-offset-2
+					button.btn.btn-default(ng-click="cancel()") Cancel
+					button.btn.btn-primary(ng-click="save(sbdResult)") Save
+
+
+
+

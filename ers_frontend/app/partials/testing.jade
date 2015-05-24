@@ -1,0 +1,38 @@
+h1 Test server
+
+p This page let you test the connection with the backend server. Each test should pass. If not, verify your installation, and that all server instances are launched!
+
+fieldset
+	legend Test connections
+div.row
+	div.col-lg-4
+		button.pull-left.btn.fa.fa-gears(ng-click="testDRF()")
+		p.pull-left Test Django Rest Framework
+	div.col-lg-1
+		computing-state(state="testDRFState")
+	div.col-lg-4(ng-show="testDRFState == 3")
+		p Control that the Django server is launched (command:
+			b  python manage.py runserver
+			|)
+
+div.row
+	div.col-lg-4
+		button.pull-left.btn.fa.fa-gears(ng-click="testDragon()")
+		p.pull-left Test SwampDragon connection
+	div.col-lg-1
+		computing-state(state="testDragonState")
+	div.col-lg-4(ng-show="testDragonState == 3")
+		p Control that the SwampDragon is launched (command:
+			b  python server.py
+			|)
+
+div.row
+	div.col-lg-4
+		button.pull-left.btn.fa.fa-gears(ng-click="testCelery()")
+		p.pull-left Test connection with Celery broker
+	div.col-lg-1
+		computing-state(state="testCeleryState")
+	div.col-lg-7(ng-show="testCeleryState == 3")
+		p Control that the Celery broker is launched (command:
+			b  celery -A ers_backend worker --loglevel=info
+			|)

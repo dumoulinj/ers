@@ -1,0 +1,51 @@
+a#btnBack.btn.btn-lg.btn-link(ui-sref="datasets.detail({ datasetId: dataset.id })", data-toggle="tooltip", data-placement="left", title="Go back to dataset detail")
+	span.glyphicon.glyphicon-chevron-left
+
+h1 Video
+h3
+	span.label.label-default {{ video.name }}
+
+br
+
+
+ul.nav.nav-pills.nav-pills-danger
+	li(ui-sref-active="active")
+		a(ui-sref="video.info")
+			span.glyphicon.glyphicon-info-sign
+			| &nbsp; Information
+	li(ui-sref-active="active")
+		a(ui-sref="video.sbd")
+			span.glyphicon.glyphicon-camera
+			| &nbsp; Shot boundaries
+	li(ui-sref-active="active")
+		a(ui-sref="video.features")
+			span.glyphicon.glyphicon-tasks
+			| &nbsp; Features
+	li(ui-sref-active="active")
+		a(ui-sref="video.arousalcurve")
+			span.glyphicon.glyphicon-star-empty
+			| &nbsp; Arousal curve
+
+br
+
+div.row
+	div.col-lg-6.col-lg-offset-3(ng-style="shot_style")
+		div(width="90%",ng-show="displayVideo")
+			videogular(vg-player-ready="onVideoPlayerReady", vg-update-time="onUpdateTime", vg-autoplay="videoConfig.autoPlay", vg-stretch="videoConfig.stretch", vg-responsive="videoConfig.responsive")
+				video#video-target.videoPlayer(vg-src="videoSources", preload='metadata')
+				//- vg-overlay-play
+				vg-buffering
+				vg-controls(vg-autohide="videoConfig.autoHide", vg-autohide-time="videoConfig.autoHideTime", style="height: 50px;")
+					vg-play-pause-button
+					vg-scrubBar
+						vg-scrubbarcurrenttime
+					vg-timeDisplay {{ currentTime }} / {{ totalTime }}
+					vg-volume
+						vg-mutebutton
+						vg-volumebar
+					vg-fullscreenButton
+
+
+br
+
+div(ui-view)

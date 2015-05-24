@@ -1,0 +1,54 @@
+h1 About
+
+div.row
+	div.col-lg-12
+		div.panel.panel-default
+			div.panel-heading
+				h4 Team
+
+			div.panel-body
+				div.row
+					div.col-lg-6
+						div.media
+							div.media-left.media-top
+								span.fa.fa-user.fa-3x
+							div.media-body
+								h4.media-heading Joel Dumoulin
+
+								p
+									span.fa.fa-envelope.fa-lg
+									a(href='mailto:{{ about.mail }}', target='blank')  {{ about.mail }}
+								p
+									span.fa.fa-home.fa-lg
+									a(href='mailto:{{ about.homepage }}', target='blank')  {{ about.homepage }}
+
+					div.col-lg-6
+						div.media
+							div.media-left.media-top
+								span.fa.fa-users.fa-3x
+							div.media-body
+								ul
+									li Pr. Elena Mugellini
+									li Pr. Omar Abou Khaled
+									li Diana Affi
+									li Célin Chassot
+
+style.
+	.label{margin: 5px; font-size: 18px;}
+
+div.row
+	div.col-lg-6
+		div
+			fieldset
+				legend Frontend used libraries
+
+			a.pull-left.label.label-primary(ng-repeat="project in usedProjects.frontend", ng-href="{{project.url}}", target="blank", data-toggle="tooltip", data-placement="top", title="License: {{ project.license }}"){{ project.name }}
+
+	div.col-lg-6
+		div
+			fieldset
+				legend Backend used libraries
+
+			a.pull-left.label.label-success(ng-repeat="project in usedProjects.backend", ng-href="{{project.url}}", target="blank", data-toggle="tooltip", data-placement="top", title="License: {{ project.license }}"){{ project.name }}
+
+

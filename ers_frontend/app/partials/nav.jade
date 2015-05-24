@@ -1,0 +1,22 @@
+div.navbar.navbar-default.navbar-fixed-top(role="navigation", bs-navbar)
+	div.container
+		div.navbar-header
+			button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-collapse")
+				span.iconbar
+				span.iconbar
+				span.iconbar
+			div.navbar-brand e
+				i RS
+		div.collapse.navbar-collapse
+			ul.nav.navbar-nav
+				li(data-match-route="/home")
+					a(ui-sref="home") Home
+				li(data-match-route="/datasets")
+					a(ui-sref="datasets.list") Datasets
+				li(data-match-route="/testing")
+					a(ui-sref="testing") Test server
+				li(data-match-route="/about")
+					a(ui-sref="about") About
+			ul.nav.navbar-nav.navbar-right
+				li
+					a.fa.fa-github.fa-2x(href="https://github.com/dumoulinj/ers", target="blank")

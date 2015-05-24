@@ -1,0 +1,108 @@
+div.row
+	div.col-lg-6
+		div.well
+			form.form-horizontal
+				fieldset
+					legend
+						span.glyphicon.glyphicon-info-sign
+						| &nbsp; General information
+
+				div.row.form-group
+					label.col-lg-3.text-right
+						strong Name
+					label.col-lg-3 {{ video.name }}
+
+				div.row.form-group
+					label.col-lg-3.text-right
+						strong Emotion
+					label.col-lg-3(ng-show="!video.emotion") Not specified
+					label.col-lg-3(ng-show="video.emotion") {{getters.emotion(video.emotion)}}
+
+				div.row.form-group
+					label.col-lg-3.text-right
+						strong Format
+					label.col-lg-3 {{ video.format }}
+
+				div.row.form-group
+					label.col-lg-3.text-right
+						strong Duration
+					label.col-lg-3 {{ video.duration }}
+
+				div.row.form-group
+					label.col-lg-3.text-right
+						strong Bitrate
+					label.col-lg-3 {{ video.bitrate }}
+	div.col-lg-6
+		div.well
+			form.form-horizontal
+				fieldset
+					legend
+						span.glyphicon.glyphicon-flag
+						| &nbsp; Monitoring
+
+				div.row
+					div.col-lg-1
+						computing-state(state="video.preparation_state")
+					div.col-lg-10 Preparation
+
+				div.row
+					div.col-lg-1
+						computing-state(state="video.shot_boundaries_detection_state")
+					div.col-lg-10 Shot boundaries detection
+
+				div.row
+					div.col-lg-1
+						computing-state(state="video.feature_extraction_state")
+					div.col-lg-10 Feature extraction
+
+				div.row
+					div.col-lg-1
+						computing-state(state="video.arousal_modeling_state")
+					div.col-lg-10 Arousal modeling
+
+div.row
+	div.col-lg-6
+		div.well
+			form.form-horizontal
+				fieldset
+					legend
+						span.glyphicon.glyphicon-film
+						| &nbsp; Video part
+
+					div.form-group
+						label.col-lg-3.text-right
+							strong Codec
+						label.col-lg-3 {{ video.video_part.codec }}
+
+					div.form-group
+						label.col-lg-3.text-right
+							strong Size
+						label.col-lg-3 {{ video.video_part.width }} x {{ video.video_part.height }}
+
+					div.form-group
+						label.col-lg-3.text-right
+							strong FPS
+						label.col-lg-3 {{ video.video_part.fps }}
+
+	div.col-lg-6
+		div.well
+			form.form-horizontal
+				fieldset
+					legend
+						span.glyphicon.glyphicon-music
+						| &nbsp; Audio part
+
+					div.form-group
+						label.col-lg-3.text-right
+							strong Codec
+						label.col-lg-3 {{ video.audio_part.codec }}
+
+					div.form-group
+						label.col-lg-3.text-right
+							strong Channels
+						label.col-lg-3 {{ video.audio_part.channels }}
+
+					div.form-group
+						label.col-lg-3.text-right
+							strong Sample rate
+						label.col-lg-3 {{ video.audio_part.samplerate }}

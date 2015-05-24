@@ -1,0 +1,31 @@
+br
+
+div
+	blockquote
+		h1 Welcome to e
+			i RS
+		h2
+			footer your emotion recognition system
+
+div.jumbotron
+	div.row
+		div.col-lg-10.col-lg-offset-1
+			h2.text-center Main features
+			ul.list-group
+				li.list-group-item(ng-repeat="feature in features")
+					span.badge(style="font-size: 36px")
+						span.glyphicon(class="{{ feature.icon }}")
+					h3.text-primary {{ feature.text }}
+					ul
+						li(ng-repeat="subFeature in feature.subFeatures")
+							h4 {{ subFeature.text }}
+
+div.jumbotron(style="background-color: white;")
+	h2 Motivation for e
+		i RS
+	p.text-justify Making experiments such as features extraction and emotion modeling for movies requires a lot of effort, and becomes even more unpractical when it comes to analyzing results. Indeed, it is hard to look at a static 2-dimensional graph and make the link with the dynamic video.
+	p.text-justify For this reason, we have created e
+		i RS
+		|, whose purpose is to help researchers with emotion recognition in movies tasks.
+
+

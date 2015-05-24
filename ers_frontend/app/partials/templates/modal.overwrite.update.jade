@@ -1,0 +1,22 @@
+div.modal
+	div.modal-dialog
+		div.modal-content
+			div.modal-header(ng-show="title")
+				button.close(type="button", ng-click="$hide()", aria-hidden="true") &times;
+				h4.modal-title {{ title }}
+
+			div.modal-body(ng-show="content")
+				p {{ content }}
+				form(name="myform")
+					| Overwrite:
+					input(type="checkbox", ng-model="overwrite")
+					br
+					| Update:
+					input(type="checkbox", ng-model="update")
+					br
+					| Overwrite audio:
+					input(type="checkbox", ng-model="overwrite_audio")
+
+			div.modal-footer
+				button.btn.btn-default(type="button", ng-click="$hide()") Cancel				
+				button.btn(ng-repeat="button in buttons", ng-class="button.class", ng-click="button.callback({ overwrite: overwrite, update: update , overwrite_audio: overwrite_audio }); $hide()") {{ button.text }}

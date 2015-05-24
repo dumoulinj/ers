@@ -1,0 +1,220 @@
+
+///////////////////////////////////////////////////////////////////////////////////////
+;
+; This section is always required in openSMILE configuration files
+;   it configures the componentManager and gives a list of all components which are to be loaded
+; The order in which the components are listed should match
+;   the order of the data flow for most efficient processing
+;
+///////////////////////////////////////////////////////////////////////////////////////
+[componentInstances:cComponentManager]
+ ; this line configures the default data memory:
+instance[dataMemory].type=cDataMemory
+instance[waveSource].type=cWaveSource
+instance[framer].type = cFramer
+instance[pe2].type=cVectorPreemphasis
+instance[w1].type=cWindower
+instance[fft1].type=cTransformFFT
+instance[fftmp1].type=cFFTmagphase
+instance[acf].type=cAcf
+instance[cepstrum].type=cAcf
+instance[pitchACF].type=cPitchACF
+instance[lld].type=cContourSmoother
+instance[delta1].type=cDeltaRegression
+instance[functL1].type=cFunctionals
+instance[csvSink].type = cCsvSink
+printLevelStats=0
+nThreads=1
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////   component configuration  ////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+; the following sections configure the components listed above
+; a help on configuration parameters can be obtained with
+;  SMILExtract -H
+; or
+;  SMILExtract -H configTypeName (= componentTypeName)
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+  ;;;; default (template) configuration section for component 'cWaveSource' ;;;;
+[waveSource:cWaveSource]
+writer.dmLevel = wave
+filename = \cm[inputfile(I):file name of the input wave file]
+monoMixdown = 1
+// segmentList[] =
+start = 0
+//\cm[start(S){0}:start point in seconds]
+end = -1
+//\cm[end(E){-1}:end point in seconds]
+noHeader = 0
+outFieldName = pcm
+
+
+  ;;;; default (template) configuration section for component 'cFramer' ;;;;
+[framer:cFramer]
+reader.dmLevel = wave
+writer.dmLevel = frames
+// nameAppend =
+copyInputName = 1
+allowLastFrameIncomplete = 0
+frameMode = fixed
+// frameListFile =
+// frameList =
+frameSize = \cm[framesize(F){0.025000}:size of a frame in seconds]
+frameStep = 0
+frameCenterSpecial = left
+noPostEOIprocessing = 1
+
+[pe2:cVectorPreemphasis]
+reader.dmLevel=frames
+writer.dmLevel=framespe
+copyInputName = 1
+processArrayFields = 1
+k=0.97
+de = 0
+
+[w1:cWindower]
+reader.dmLevel=framespe
+writer.dmLevel=winframe
+copyInputName = 1
+processArrayFields = 1
+winFunc = ham
+gain = 1.0
+offset = 0
+
+  // ---- LLD -----
+
+[fft1:cTransformFFT]
+reader.dmLevel=winframe
+writer.dmLevel=fftc
+copyInputName = 1
+processArrayFields = 1
+inverse = 0
+
+[fftmp1:cFFTmagphase]
+reader.dmLevel=fftc
+writer.dmLevel=fftmag
+copyInputName = 1
+processArrayFields = 1
+inverse = 0
+magnitude = 1
+phase = 0
+
+[acf:cAcf]
+reader.dmLevel=fftmag
+writer.dmLevel=acf
+nameAppend = acf
+copyInputName = 1
+processArrayFields = 1
+usePower = 1
+cepstrum = 0
+
+[cepstrum:cAcf]
+reader.dmLevel=fftmag
+writer.dmLevel=cepstrum
+nameAppend = acf
+copyInputName = 1
+processArrayFields = 1
+usePower = 1
+cepstrum = 1
+
+[pitchACF:cPitchACF]
+  ; the pitchACF component must ALWAYS read from acf AND cepstrum in the given order!
+reader.dmLevel=acf;cepstrum
+writer.dmLevel=pitch
+copyInputName = 1
+processArrayFields=0
+maxPitch = 500
+voiceProb = 1
+voiceQual = 0
+HNR = 0
+F0 = 1
+F0raw = 0
+F0env = 0
+voicingCutoff = 0.550000
+
+[lld:cContourSmoother]
+reader.dmLevel=pitch
+writer.dmLevel=lld
+buffersize=100000
+writer.levelconf.nT=10
+;writer.levelconf.noHang=2
+writer.levelconf.isRb=0
+writer.levelconf.growDyn=1
+nameAppend = sma
+copyInputName = 1
+noPostEOIprocessing = 0
+smaWin = 3
+
+// ---- delta regression of LLD ----
+[delta1:cDeltaRegression]
+reader.dmLevel=lld
+buffersize=100000
+writer.dmLevel=lld_de
+writer.levelconf.isRb=0
+writer.levelconf.growDyn=1
+nameAppend = de
+copyInputName = 1
+noPostEOIprocessing = 0
+deltawin=2
+blocksize=1
+
+[functL1:cFunctionals]
+reader.dmLevel=lld;lld_de
+writer.dmLevel=func
+copyInputName = 1
+ ; frameSize and frameStep = 0 => functionals over complete input
+ ; (NOTE: buffersize of lld and lld_de levels must be large enough!!)
+; frameSize = \cm[framesize(F){0.025000}:size of a frame in seconds]
+frameSize = 1
+frameStep = 0
+frameMode = fixed
+frameCenterSpecial = left
+functionalsEnabled=Extremes;Regression;Moments
+Extremes.max = 1
+Extremes.min = 1
+Extremes.range = 1
+Extremes.maxpos = 1
+Extremes.minpos = 1
+Extremes.amean = 1
+Extremes.maxameandist = 0
+Extremes.minameandist = 0
+ ; Note: the much better way to normalise the times of maxpos and minpos
+ ; is 'turn', however for compatibility with old files the default 'frame'
+ ; is kept here:
+Extremes.norm = frame
+Regression.linregc1 = 0
+Regression.linregc2 = 0
+Regression.linregerrA = 0
+Regression.linregerrQ = 0
+Regression.qregc1 = 0
+Regression.qregc2 = 0
+Regression.qregc3 = 0
+Regression.qregerrA = 0
+Regression.qregerrQ = 0
+Regression.centroid = 0
+Moments.variance = 0
+Moments.stddev = 0
+Moments.skewness = 1
+Moments.kurtosis = 1
+Moments.amean = 0
+
+
+
+  //////////////////////////////////////////////////////////////////////
+ ///////////////////  data output configuration  //////////////////////
+//////////////////////////////////////////////////////////////////////
+
+ ;;;; default (template) configuration section for component 'cCsvSink' ;;;;
+[csvSink:cCsvSink]
+reader.dmLevel = func
+errorOnNoOutput = 0
+filename = \cm[outputfile(O):file name of the output CSV file]
+delimChar = ;
+append = 0
+timestamp = 1
+number = 1
+printHeader = 1
+
+//////---------------------- END -------------------------///////

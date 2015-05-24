@@ -1,0 +1,42 @@
+# Django
+Django==1.7.7
+
+# DB
+MySQL-python
+django-model-utils
+
+# Structures
+numpy
+jsonfield
+django-enumfield
+
+# Helping apps
+django-configurations
+django-annoying
+
+#REST API
+djangorestframework==3.0.1
+markdown
+django-filter
+django-rest-swagger==0.2.6
+
+#CORS
+django-cors-headers
+
+#Celery
+celery[redis]
+
+#Tests
+model_mommy
+
+#Color logging
+git+https://github.com/tiliv/django-colors-formatter
+
+#PIL
+Pillow
+
+# Python video converter
+git+https://github.com/senko/python-video-converter
+
+#Swampdragon
+swampdragon==0.4.2.1
