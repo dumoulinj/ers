@@ -682,6 +682,32 @@ angular
 			if $scope.addVideo
 				$scope.uploader.emotion = 0
 
+<<<<<<< HEAD
+=======
+
+		$scope.$watch "dataset.video_path", ->
+			try
+				folder = ""
+				if $scope.uploader.emotion != undefined
+					emotion = _.result(_.find($scope.emotions, {'value': $scope.uploader.emotion}), 'label')
+					folder = "/" + emotion
+
+				$scope.uploader.formData = [{'path': $scope.dataset.video_path + folder}]
+			catch
+			# No values for the moment
+
+		$scope.$watch "uploader.emotion", ->
+			try
+				folder = ""
+				if $scope.uploader.emotion != undefined
+					emotion = _.result(_.find($scope.emotions, {'value': $scope.uploader.emotion}), 'label')
+					folder = "/" + emotion
+
+				$scope.uploader.formData = [{'path': $scope.dataset.video_path + folder}]
+			catch
+				# No values for the moment
+
+>>>>>>> dd3fe3e8db87cac24e7d8613c6c05c092820adff
 		# Filters
 		$scope.uploader.filters.push
 			name: "customFilter"
