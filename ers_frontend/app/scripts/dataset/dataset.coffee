@@ -682,27 +682,6 @@ angular
 			if $scope.addVideo
 				$scope.uploader.emotion = 0
 
-
-		$scope.$watch "dataset.video_path", ->
-			try
-				folder = ""
-				if $scope.uploader.emotion != undefined
-					folder = "/" + $scope.emotions[$scope.uploader.emotion].label
-
-				$scope.uploader.formData = [{'path': $scope.dataset.video_path + folder}]
-			catch
-			# No values for the moment
-
-		$scope.$watch "uploader.emotion", ->
-			try
-				folder = ""
-				if $scope.uploader.emotion != undefined
-					folder = "/" + $scope.emotions[$scope.uploader.emotion].label
-
-				$scope.uploader.formData = [{'path': $scope.dataset.video_path + folder}]
-			catch
-				# No values for the moment
-
 		# Filters
 		$scope.uploader.filters.push
 			name: "customFilter"
@@ -719,8 +698,16 @@ angular
 #		uploader.onAfterAddingAll = (addedFileItems) ->
 #			console.info "onAfterAddingAll", addedFileItems
 #
-#		uploader.onBeforeUploadItem = (item) ->
-#			console.info "onBeforeUploadItem", item
+		$scope.uploader.onBeforeUploadItem = (item) ->
+			emotion = ""
+			if $scope.uploader.emotion != undefined
+				emotion = "/" + _.result(_.find($scope.emotions, {'value': $scope.uploader.emotion}), 'label')
+			path = $scope.dataset.video_path + emotion
+
+			formData = [{
+				'path': path
+			}]
+			item.formData = formData
 #
 #		uploader.onProgressItem = (fileItem, progress) ->
 #			console.info "onProgressItem", fileItem, progress
