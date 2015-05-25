@@ -687,7 +687,8 @@ angular
 			try
 				folder = ""
 				if $scope.uploader.emotion != undefined
-					folder = "/" + $scope.emotions[$scope.uploader.emotion].label
+					emotion = _.result(_.find($scope.emotions, {'value': $scope.uploader.emotion}), 'label')
+					folder = "/" + emotion
 
 				$scope.uploader.formData = [{'path': $scope.dataset.video_path + folder}]
 			catch
@@ -697,8 +698,9 @@ angular
 			try
 				folder = ""
 				if $scope.uploader.emotion != undefined
-					folder = "/" + $scope.emotions[$scope.uploader.emotion].label
-
+					emotion = _.result(_.find($scope.emotions, {'value': $scope.uploader.emotion}), 'label')
+					folder = "/" + emotion
+					
 				$scope.uploader.formData = [{'path': $scope.dataset.video_path + folder}]
 			catch
 				# No values for the moment
