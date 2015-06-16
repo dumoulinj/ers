@@ -1,8 +1,9 @@
 from dataset_manager import tasks
 from dataset_manager.enums import FeatureType
 from dataset_manager.models import Dataset, Video
+from django.conf import settings
 
-use_celery = True
+use_celery = settings.USE_CELERY
 
 class DatasetFacade:
     def _get_dataset_by_id(dataset_id):

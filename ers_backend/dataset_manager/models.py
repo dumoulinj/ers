@@ -263,12 +263,12 @@ class Dataset(SelfPublishModel, models.Model):
         if configuration:
             for entry in configuration:
                 algorithm = None
-                if(entry['value'] == ShotBoundariesDetectionAlgorithmType.ECR):
-                    algorithm = ECR()
-                    algorithm.type = ShotBoundariesDetectionAlgorithmType.ECR
-                elif(entry['value'] == ShotBoundariesDetectionAlgorithmType.ECR):
+                if(entry['value'] == ShotBoundariesDetectionAlgorithmType.COLOR_HISTOGRAM):
                     algorithm = ColorHistograms()
                     algorithm.type = ShotBoundariesDetectionAlgorithmType.COLOR_HISTOGRAM
+                else:
+                    algorithm = ECR()
+                    algorithm.type = ShotBoundariesDetectionAlgorithmType.ECR
 
                 algorithm.threshold = entry['threshold']
                 algorithm.shots_detection = shots_detection

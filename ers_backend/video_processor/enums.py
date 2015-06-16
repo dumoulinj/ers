@@ -7,7 +7,7 @@ class ShotBoundariesDetectionAlgorithmType(enum.Enum):
 
     labels = {
         COLOR_HISTOGRAM: "color histograms",
-        ECR: "edge change ration",
+        ECR: "edge change ratio",
         NONE: "none"
     }
 

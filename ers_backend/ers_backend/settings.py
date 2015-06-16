@@ -166,6 +166,7 @@ SWAMP_DRAGON_CONNECTION = ('swampdragon.connections.sockjs_connection.DjangoSubs
 DRAGON_URL = 'http://localhost:9999/'
 
 # Celery
+USE_CELERY = True
 BROKER_URL = 'redis://localhost:6379/1'
 
 # Database
