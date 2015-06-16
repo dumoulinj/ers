@@ -31,20 +31,25 @@ br
 div.row
 	div.col-lg-6.col-lg-offset-3(ng-style="shot_style")
 		div(width="90%",ng-show="displayVideo")
-			videogular(vg-player-ready="onVideoPlayerReady", vg-update-time="onUpdateTime", vg-autoplay="videoConfig.autoPlay", vg-stretch="videoConfig.stretch", vg-responsive="videoConfig.responsive")
-				video#video-target.videoPlayer(vg-src="videoSources", preload='metadata')
-				//- vg-overlay-play
+			videogular(vg-player-ready="onVideoPlayerReady($API)", vg-update-time="onUpdateTime($currentTime, $duration)", vg-auto-play="videoConfig.autoPlay", vg-stretch="videoConfig.stretch", vg-responsive="videoConfig.responsive")
+				vg-media#video-target.videoPlayer(vg-src="videoSources", preload='metadata')
+
 				vg-buffering
+
 				vg-controls(vg-autohide="videoConfig.autoHide", vg-autohide-time="videoConfig.autoHideTime", style="height: 50px;")
 					vg-play-pause-button
-					vg-scrubBar
-						vg-scrubbarcurrenttime
-					vg-timeDisplay {{ currentTime }} / {{ totalTime }}
-					vg-volume
-						vg-mutebutton
-						vg-volumebar
-					vg-fullscreenButton
+					vg-scrub-bar
+						vg-scrub-bar-current-time
+					vg-time-display {{ currentTime | date:'mm:ss' }}
+					vg-time-display / {{ totalTime | date:'mm:ss' }}
 
+					vg-volume
+						vg-mute-button
+						vg-volume-bar
+
+					vg-fullscreen-button
+
+				vg-overlay-play
 
 br
 
