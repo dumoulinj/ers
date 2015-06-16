@@ -157,7 +157,7 @@ angular
 		$scope.sbd.algorithm.value
 		$scope.sbd.algorithm.label
 		$scope.sbd.weight = 1
-		$scope.sbd.configuration = (if $cookieStore.get('sbd.configuration') then $cookieStore.get('sbd.configuration') else [{"value": 0, "label": "edge change ratio", "threshold": 0.7, "weight": 1}] )
+		$scope.sbd.configuration = (if $cookieStore.get('sbd.configuration') then $cookieStore.get('sbd.configuration') else [{"value": 1, "label": "edge change ratio", "threshold": 0.7, "weight": 1}] )
 		$scope.sbd.globalThreshold = (if $cookieStore.get('sbd.globalThreshold') then $cookieStore.get('sbd.globalThreshold') else 0.7 )
 
 		# Monitoring
