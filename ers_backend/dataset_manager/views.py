@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
 from dataset_manager.enums import EmotionType, FeatureType, FeatureFunctionType
 from dataset_manager.models import Dataset, Video, AudioPart, VideoPart, Features
@@ -70,4 +70,33 @@ class FeatureFunctionTypesViewSet(APIView):
             feature_function_type.append({'value': choice[0], 'label': FeatureFunctionType.label(choice[0])})
 
         return Response(feature_function_type)
+
+
+class VideoByNameViewSet(generics.RetrieveAPIView):
+    """
+    Get a video by filtering on dataset_name and video_name. Return only one video.
+    """
+    serializer_class = VideoSerializer
+
+    def get(self, request):
+        try:
+            queryset = Video.objects.all()
+
+            dataset_name = request.query_params.get('dataset_name', None)
+
+            if dataset_name is not None:
+                queryset = queryset.filter(dataset__name=dataset_name)
+
+
+            video_name = request.query_params.get('video_name', None)
+
+            if video_name is not None:
+                queryset = queryset.get(full_name__contains=video_name)
+
+            serializer = VideoSerializer(queryset, context={'request': request})
+
+            return Response(serializer.data)
+        except:
+            return Response("No video found for dataset '{}' with name '{}'".format(dataset_name, video_name), status=status.HTTP_400_BAD_REQUEST)
+
 

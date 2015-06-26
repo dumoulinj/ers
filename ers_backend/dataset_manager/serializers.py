@@ -54,4 +54,4 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Video
-        fields = ('url', 'id', 'dataset', 'name', 'emotion', 'format', 'duration', 'bitrate', 'video_part', 'audio_part', 'shots_detections', 'arousal', 'shot_boundaries_ground_truth', 'preparation_state', 'shot_boundaries_detection_state', 'feature_extraction_state', 'arousal_modeling_state', 'available_features')
+        fields = ('url', 'id', 'dataset', 'name', 'full_name', 'emotion', 'format', 'duration', 'bitrate', 'video_part', 'audio_part', 'shots_detections', 'arousal', 'shot_boundaries_ground_truth', 'preparation_state', 'shot_boundaries_detection_state', 'feature_extraction_state', 'arousal_modeling_state', 'available_features')

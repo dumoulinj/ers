@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     url(r'^emotions/$', views.EmotionsViewSet.as_view()),
     url(r'^feature_types/$', views.FeatureTypesViewSet.as_view()),
     url(r'^feature_function_types/$', views.FeatureFunctionTypesViewSet.as_view()),
+    url(r'^video_by_name/$', views.VideoByNameViewSet.as_view()),
 )
