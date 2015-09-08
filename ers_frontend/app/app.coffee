@@ -27,6 +27,7 @@ angular
 		'smart-table'
 		'angularSpinner'
 		'checklist-model'
+		'hue'
 	]
 
 	.constant("ComputingStateType", {

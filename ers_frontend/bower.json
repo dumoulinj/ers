@@ -35,7 +35,8 @@
     "angular-smart-table": "~2.0.2",
     "fontawesome": "~4.3.0",
     "angular-spinner": "~0.6.1",
-    "checklist-model": "~0.2.4"
+    "checklist-model": "~0.2.4",
+    "angular-hue-service": "~1.0.2"
   },
   "overrides": {
     "angular-mocks": {

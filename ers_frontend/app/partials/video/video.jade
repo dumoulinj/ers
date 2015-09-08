@@ -24,13 +24,13 @@ ul.nav.nav-pills.nav-pills-danger
 	li(ui-sref-active="active")
 		a(ui-sref="video.arousalcurve")
 			span.glyphicon.glyphicon-star-empty
-			| &nbsp; Arousal curve
+			| &nbsp; Emotions
 
 br
 
 div.row
 	div.col-lg-6.col-lg-offset-3(ng-style="shot_style")
-		div(width="90%",ng-show="displayVideo")
+		div(ng-show="displayVideo")
 			videogular(vg-player-ready="onVideoPlayerReady($API)", vg-update-time="onUpdateTime($currentTime, $duration)", vg-auto-play="videoConfig.autoPlay", vg-stretch="videoConfig.stretch", vg-responsive="videoConfig.responsive")
 				vg-media#video-target.videoPlayer(vg-src="videoSources", preload='metadata')
 
