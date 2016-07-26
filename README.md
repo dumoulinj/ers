@@ -1,9 +1,9 @@
-Project homepage: http://ers.ilab-research.ch/#/
+Project homepage: http://ers.humantech.institute/#/
 
 # e*RS*
 e*RS* is an emotion recognition system dedicated to researchers, whose purpose is to help them with emotion recognition in movies tasks.
 
-To see what you can do with e*RS*, have a look to http://ers.ilab-research.ch/#/presentation
+To see what you can do with e*RS*, have a look to http://ers.humantech.institute/#/presentation
 
 ## Installation
 e*RS* works on Linux and Mac OS X. (it is planned to dockerize it soon)
